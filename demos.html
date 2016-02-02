@@ -11,41 +11,40 @@
 		<script src="js/skel.min.js"></script>
 		<script src="js/skel-layers.min.js"></script>
 		<script src="js/init.js"></script>
+		<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<link rel="stylesheet" href="css/custom.css" />
 		<noscript>
 			<link rel="stylesheet" href="css/skel.css" />
 			<link rel="stylesheet" href="css/style.css" />
 			<link rel="stylesheet" href="css/style-xlarge.css" />
 		</noscript>
+		<style>
+			.chart div {
+				font: 10px sans-serif;
+				background-color: steelblue;
+				text-align: right;
+				padding: 3px;
+				margin: 1px;
+				color: white;
+			}
+		</style>
 	</head>
 	<body class="landing">
-	<a href="https://github.com/DataScientistsUB/CTR_predictor" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
 
 
-		<!-- Banner -->
-			<section id="banner">
-				<h2>CTR Predictor</h2>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. (slogan here)</p>
-				<ul class="actions">
-					<li>
-						<a href="demos.html" class="button big">View live example</a>
-					</li>
-				</ul>
-			</section>
 
 		<!-- One -->
 			<section id="one" class="wrapper style1 special">
 				<div class="container">
 					<header class="major">
-						<h2>Technologies</h2>
+						<h2>Data info.</h2>
 						<p>Lorem ipsum dolor sit amet, delectus consequatur, similique quia!</p>
 					</header>
 					<div class="row 150%">
 						<div class="4u 12u$(medium)">
 							<section class="box">
-								<i class="icon big rounded color1 fa-cloud"></i>
-								<h3>Lorem ipsum dolor</h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim quam consectetur quibusdam magni minus aut modi aliquid.</p>
+								<h3>Hotel category (stars)</h3>
+								<div id="stars_chart" class="chart"></div>
 							</section>
 						</div>
 						<div class="4u 12u$(medium)">
@@ -66,7 +65,7 @@
 				</div>
 			</section>
 
-		<!-- Two -->
+		<!-- Two 
 			<section id="two" class="wrapper style2 special">
 				<div class="container">
 					<header class="major">
@@ -111,7 +110,7 @@
 						</ul>
 					</footer>
 				</div>
-			</section>
+			</section>-->
 
 		<!-- Three -->
 			<!--<section id="three" class="wrapper style3 special">
@@ -175,4 +174,25 @@
 			</footer>
 
 	</body>
+	<script>
+		(function(){
+			var data = [4, 8, 15, 16, 23, 42];
+			
+			width = document.querySelector("#stars_chart").offsetWidth;
+			width = 343;
+			setTimeout(function(){
+				var x = d3.scale.linear()
+					.domain([0, d3.max(data)])
+					.range([0, width]);
+					
+				d3.select("#stars_chart")
+				  .selectAll("div")
+					.data(data)
+				  .enter().append("div")
+					.style("width", function(d) { return x(d) + "px"; })
+					.text(function(d) { return d; });
+			}, 1000);
+		})();
+	</script>
+	
 </html>
