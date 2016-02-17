@@ -353,9 +353,7 @@ for e in xrange(epoch):
             p_test[i] = 0
         else:
             p_test[i] = 1
-    p_pred = [p for p in p_test]
     print confusion_matrix(y_test, p_test)
-    print len(p_test)
     print('Epoch %d finished, validation logloss: %f, elapsed time: %s' % (e, loss/count, str(datetime.now() - start)))
 
 
