@@ -12,8 +12,9 @@ Attributions:
 
 Version: 1.0
 Creation Date: 10/02/2016
-Date Last Modification: 10/02/2016
+Date Last Modification: 17/02/2016
 Revision History:
+    Rev 1.1 - Addition of the confusion matrix, and manual tunning of L1 and L2
     Rev 1.0 - Addition of FTRL- proximal method and online CV
     Rev 0.1 - File Created, Xavier Paredes-Fortuny, 09/02/2016
 '''
@@ -35,10 +36,10 @@ test = 'test\\test_rev2'                 # path to testing file
 submission = 'submission1234.csv'  # path of to be outputted submission file
 
 # B, model
-alpha = .1  # learning rate
+alpha = 1.#.1  # learning rate
 beta = 1.   # smoothing parameter for adaptive learning rate
-L1 = 1.     # L1 regularization, larger value means more regularized
-L2 = 1.     # L2 regularization, larger value means more regularized
+L1 = 1e5 #1.    # L1 regularization, larger value means more regularized
+L2 = 1e5 #1.     # L2 regularization, larger value means more regularized
 
 # C, feature/hash trick
 D = 2 ** 20             # number of weights to use
@@ -47,7 +48,7 @@ interaction = False     # whether to enable poly2 feature interactions
 # D, training/validation
 epoch = 1       # learn training data for N passes
 holdafter = None #9   # data after date N (exclusive) are used as validation
-holdout = 9 #None  # use every N training instance for holdout validation
+holdout = 5#9 #None  # use every N training instance for holdout validation
 
 
 
@@ -143,12 +144,12 @@ def data(path, D):
                 x.append(index)
 
             yield t, date, ID, x, y
-            
- 
+
+
 #############################################################################
 # Logloss
 ############################################################################
- 
+
 def logloss(p, y):
     ''' FUNCTION: Bounded logloss
 
@@ -294,9 +295,9 @@ class ftrl_proximal(object):
         for i in self._indices(x):
             sigma = (sqrt(n[i] + g * g) - sqrt(n[i])) / alpha
             z[i] += g - sigma * w[i]
-            n[i] += g * g           
-            
-            
+            n[i] += g * g
+
+
 ###########################################################################
 #    START TRAINING
 ##########################################################################3
@@ -307,6 +308,8 @@ start = datetime.now()
 learner = ftrl_proximal(alpha, beta, L1, L2, D, interaction)
 
 # start training
+p_test = []
+y_test = []
 for e in xrange(epoch):
     loss = 0.
     count = 0
@@ -318,8 +321,8 @@ for e in xrange(epoch):
         #   ID: id provided in original data
         #    x: features
         #    y: label (click)
-    
-        
+
+
 
         # step 1, get prediction from learner
         p = learner.predict(x)
@@ -336,12 +339,23 @@ for e in xrange(epoch):
             loss += logloss(p, y)
             count += 1
             #print count
+            p_test.append(p)
+            y_test.append(y)
         else:
             # step 2-2, update learner with label (click) information
             learner.update(x, p, y)
             count_2 += 1
-            print count_2
+            # print count_2
 
+    from sklearn.metrics import confusion_matrix
+    for i, p in enumerate(p_test):
+        if p < 0.5:
+            p_test[i] = 0
+        else:
+            p_test[i] = 1
+    p_pred = [p for p in p_test]
+    print confusion_matrix(y_test, p_test)
+    print len(p_test)
     print('Epoch %d finished, validation logloss: %f, elapsed time: %s' % (e, loss/count, str(datetime.now() - start)))
 
 
