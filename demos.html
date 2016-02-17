@@ -27,9 +27,6 @@
 				margin: 1px;
 				color: white;
 			}
-			#stars_chart{
-				display:none;
-			}
 		</style>
 	</head>
 	<body class="landing">
@@ -181,8 +178,9 @@
 		(function(){
 			var data = [4, 8, 15, 16, 23, 42];
 			
+			width = document.querySelector("#stars_chart").offsetWidth;
+			width = 343;
 			setTimeout(function(){
-				width = document.querySelector("#stars_chart").offsetWidth;
 				var x = d3.scale.linear()
 					.domain([0, d3.max(data)])
 					.range([0, width]);
@@ -193,7 +191,6 @@
 				  .enter().append("div")
 					.style("width", function(d) { return x(d) + "px"; })
 					.text(function(d) { return d; });
-				$("#stars_chart").fadeIn();
 			}, 1000);
 		})();
 	</script>
