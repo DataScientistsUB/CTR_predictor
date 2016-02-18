@@ -38,8 +38,8 @@ submission = 'submission1234.csv'  # path of to be outputted submission file
 # B, model
 alpha = 1.#.1  # learning rate
 beta = 1.   # smoothing parameter for adaptive learning rate
-L1 = 1e5 #1.    # L1 regularization, larger value means more regularized
-L2 = 1e5 #1.     # L2 regularization, larger value means more regularized
+L1 = 1.    # L1 regularization, larger value means more regularized
+L2 = 1.     # L2 regularization, larger value means more regularized
 
 # C, feature/hash trick
 D = 2 ** 20             # number of weights to use
@@ -347,16 +347,18 @@ for e in xrange(epoch):
             count_2 += 1
             # print count_2
 
-    from sklearn.metrics import confusion_matrix
-    for i, p in enumerate(p_test):
-        if p < 0.5:
-            p_test[i] = 0
-        else:
-            p_test[i] = 1
-    print confusion_matrix(y_test, p_test)
+    # from sklearn.metrics import confusion_matrix
+    # for i, p in enumerate(p_test):
+    #     if p < 0.5:
+    #         p_test[i] = 0
+    #     else:
+    #         p_test[i] = 1
+    # print confusion_matrix(y_test, p_test)
     print('Epoch %d finished, validation logloss: %f, elapsed time: %s' % (e, loss/count, str(datetime.now() - start)))
 
-
+with open('y_y_pred.txt', 'wb') as f:
+    for i, _ in enumerate(y_test):
+        f.write(str(y_test[i])+' '+str(p_test[i])+'\n')
 
 
 
