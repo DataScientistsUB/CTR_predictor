@@ -17,6 +17,12 @@
 			<link rel="stylesheet" href="css/style.css" />
 			<link rel="stylesheet" href="css/style-xlarge.css" />
 		</noscript>
+		
+		<style>
+			.clickable{
+				cursor:pointer;
+			}
+		</style>
 	</head>
 	<body class="landing">
 	<a href="https://github.com/DataScientistsUB/CTR_predictor" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
@@ -43,22 +49,22 @@
 					<div class="row 150%">
 						<div class="4u 12u$(medium)">
 							<section class="box">
-								<i class="icon big rounded color1 fa-cloud"></i>
-								<h3>Lorem ipsum dolor</h3>
+								<i id="github_lnk" class="icon big rounded color1 fa-cloud clickable"></i>
+								<h3>Github</h3>
 								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim quam consectetur quibusdam magni minus aut modi aliquid.</p>
 							</section>
 						</div>
 						<div class="4u 12u$(medium)">
 							<section class="box">
-								<i class="icon big rounded color9 fa-desktop"></i>
+								<i class="icon big rounded color9 fa-desktop clickable"></i>
 								<h3>Consectetur adipisicing</h3>
 								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium ullam consequatur repellat debitis maxime.</p>
 							</section>
 						</div>
 						<div class="4u$ 12u$(medium)">
 							<section class="box">
-								<i class="icon big rounded color6 fa-rocket"></i>
-								<h3>Adipisicing elit totam</h3>
+								<i id="d3_lnk" class="icon big rounded color6 fa-rocket clickable"></i>
+								<h3>D3.js</h3>
 								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque eaque eveniet, nesciunt molestias. Ipsam, voluptate vero.</p>
 							</section>
 						</div>
@@ -175,4 +181,9 @@
 			</footer>
 
 	</body>
+	<script>
+		document.querySelector("#github_lnk").addEventListener("click",function(){
+			window.open("//github.com")
+		})
+	</script>
 </html>

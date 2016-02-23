@@ -178,9 +178,8 @@
 		(function(){
 			var data = [4, 8, 15, 16, 23, 42];
 			
-			width = document.querySelector("#stars_chart").offsetWidth;
-			width = 343;
 			setTimeout(function(){
+				width = document.querySelector("#stars_chart").offsetWidth;
 				var x = d3.scale.linear()
 					.domain([0, d3.max(data)])
 					.range([0, width]);
