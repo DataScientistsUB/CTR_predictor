@@ -27,6 +27,15 @@
 				margin: 1px;
 				color: white;
 			}
+			.axis path {
+				fill: none;
+				stroke: #777;
+				shape-rendering: crispEdges;
+			}
+			.axis text {
+				font-family: Lato;
+				font-size: 13px;
+			}
 		</style>
 	</head>
 	<body class="landing">
@@ -59,6 +68,17 @@
 								<i class="icon big rounded color6 fa-rocket"></i>
 								<h3>Adipisicing elit totam</h3>
 								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque eaque eveniet, nesciunt molestias. Ipsam, voluptate vero.</p>
+							</section>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="two" class="wrapper style2 special">
+				<div class="container">
+					<div class="row 150%">
+						<div class="12u 12u$(medium)">
+							<section class="box">
+								<svg id="visualisation" width="1000" height="500"></svg>
 							</section>
 						</div>
 					</div>
@@ -175,6 +195,7 @@
 
 	</body>
 	<script>
+		var res;
 		(function(){
 			var data = [4, 8, 15, 16, 23, 42];
 			
@@ -191,7 +212,97 @@
 					.style("width", function(d) { return x(d) + "px"; })
 					.text(function(d) { return d; });
 			}, 1000);
+			/*
+			$.ajax({
+				//url: "http://cdn.neoares.eu/output.txt",
+				url: "y_y_pred.txt",
+				//headers: {'Access-Control-Allow-Origin':'http://cdn.neoares.eu/','Access-Control-Allow-Credentials':'true'},
+				//crossDomain: true,
+				//dataType: 'text',
+				success: function(data){
+					res = data.split("\n").map(function(e){return [parseInt(e.split(" ")[0]), parseFloat(e.split(" ")[1])]})
+					console.log("SUCCESS");
+				},
+				error: function(e,text,errorThrown){
+					alert(text);
+					console.log(e);
+					console.log(errorThrown);
+					//alert(errorThrown);
+				}
+			})
+			*/
+			
 		})();
+		var data = [{
+			"sale": "202",
+			"year": "2000"
+		}, {
+			"sale": "215",
+			"year": "2001"
+		}, {
+			"sale": "179",
+			"year": "2002"
+		}, {
+			"sale": "199",
+			"year": "2003"
+		}, {
+			"sale": "134",
+			"year": "2003"
+		}, {
+			"sale": "176",
+			"year": "2010"
+		}];
+		var vis = d3.select("#visualisation");
+		var WIDTH = 1000;
+		var HEIGHT = 500;
+		var MARGINS = {
+			top: 20,
+			right: 20,
+			bottom: 20,
+			left: 50
+		};
+		var xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([2000,2010]);
+		var yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([134,215]);
+		
+		var xAxis = d3.svg.axis()
+			.scale(xScale);
+
+		var yAxis = d3.svg.axis()
+			.scale(yScale)
+			.orient("left");
+			
+		vis.append("svg:g")
+			.attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+			.call(xAxis);
+			
+		vis.append("svg:g")
+			.attr("transform", "translate(" + (MARGINS.left) + ",0)")
+			.call(yAxis);
+		
+		var lineGen = d3.svg.line()
+			.x(function(d) {
+				return xScale(d.year);
+			})
+			.y(function(d) {
+				return yScale(d.sale);
+			});
+		
+		vis.append('svg:path')
+		  .attr('d', lineGen(data))
+		  .attr('stroke', 'green')
+		  .attr('stroke-width', 2)
+		  .attr('fill', 'none');
+		 
+		// esto no esta funcionando, sigue apareciendo super lineal el grafico
+		var lineGen = d3.svg.line()
+			.x(function(d) {
+				return xScale(d.year);
+			})
+			.y(function(d) {
+				return yScale(d.sale);
+			})
+			.interpolate("basis");
+
 	</script>
 	
 </html>
