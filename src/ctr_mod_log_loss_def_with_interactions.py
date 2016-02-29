@@ -2,8 +2,8 @@
 Computes the Click-Through Rate Prediction on accommodation Ads
 
 Authors:
-    Xavier Paredes-Fortuny <xparedesfortuny@gmail.com>
-    and Luis Blanco <lblanco@gmail.com>
+    Luis Blanco <lblanco@gmail.com>
+    and Xavier Paredes-Fortuny <xparedesfortuny@gmail.com>
     (add yourself if you add/modify anything)
 
 Attributions:
@@ -22,14 +22,14 @@ Revision History:
 
 
 # First, we clear all the variables in the workspace
-from IPython import get_ipython  
+from IPython import get_ipython
 get_ipython().magic('reset -sf')
 
 
 from csv import DictReader
 from datetime import datetime
 from math import exp, log, sqrt, floor
-import scipy.io as sio 
+import scipy.io as sio
 
 
 ##############################################################################
@@ -352,10 +352,10 @@ for e in xrange(epoch):
             #            validate with instances from day N + 1 and after
             #
             # holdout: validate with every N instance, train with others
-            
+
             if count ==0:
-                print('Validation set') 
-                
+                print('Validation set')
+
             loss += logloss(p, y)
             count += 1
             #print count
@@ -365,7 +365,7 @@ for e in xrange(epoch):
             # step 2-2, update learner with label (click) information
             learner.update(x, p, y,gamma, delta)
             #count_2 += 1
-            
+
             #if (count_2 % 1000 == 0):
             if (t% 1000 == 0):
                 #print count_2
@@ -383,7 +383,7 @@ for e in xrange(epoch):
 with open('y_y_pred.txt', 'wb') as f:
     for i, _ in enumerate(y_test):
         f.write(str(y_test[i])+' '+str(p_test[i])+'\n')
-        
+
 
 
 
