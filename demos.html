@@ -195,10 +195,9 @@
 
 	</body>
 	<script>
-		var res;
-		(function(){
+		var res,range;
+		$(function(){
 			var data = [4, 8, 15, 16, 23, 42];
-			
 			setTimeout(function(){
 				width = document.querySelector("#stars_chart").offsetWidth;
 				var x = d3.scale.linear()
@@ -212,97 +211,94 @@
 					.style("width", function(d) { return x(d) + "px"; })
 					.text(function(d) { return d; });
 			}, 1000);
-			/*
-			$.ajax({
-				//url: "http://cdn.neoares.eu/output.txt",
-				url: "y_y_pred.txt",
-				//headers: {'Access-Control-Allow-Origin':'http://cdn.neoares.eu/','Access-Control-Allow-Credentials':'true'},
-				//crossDomain: true,
-				//dataType: 'text',
-				success: function(data){
-					res = data.split("\n").map(function(e){return [parseInt(e.split(" ")[0]), parseFloat(e.split(" ")[1])]})
-					console.log("SUCCESS");
-				},
-				error: function(e,text,errorThrown){
-					alert(text);
-					console.log(e);
-					console.log(errorThrown);
-					//alert(errorThrown);
-				}
-			})
-			*/
-			
-		})();
-		var data = [{
-			"sale": "202",
-			"year": "2000"
-		}, {
-			"sale": "215",
-			"year": "2001"
-		}, {
-			"sale": "179",
-			"year": "2002"
-		}, {
-			"sale": "199",
-			"year": "2003"
-		}, {
-			"sale": "134",
-			"year": "2003"
-		}, {
-			"sale": "176",
-			"year": "2010"
-		}];
-		var vis = d3.select("#visualisation");
-		var WIDTH = 1000;
-		var HEIGHT = 500;
-		var MARGINS = {
-			top: 20,
-			right: 20,
-			bottom: 20,
-			left: 50
-		};
-		var xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([2000,2010]);
-		var yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([134,215]);
+		});
 		
-		var xAxis = d3.svg.axis()
-			.scale(xScale);
+		$.ajax({
+			url: "data/thresholdVSrevenue.txt",
+			success: function(data){
+				res = data.split("\n").map(function(e){return {"x":e.split(" ")[0], "y":e.split(" ")[1]}})
+				console.log("SUCCESS");
+				range = getRangeXY(res);
+				var vis = d3.select("#visualisation");
+				var WIDTH = 1000;
+				var HEIGHT = 500;
+				var MARGINS = {
+					top: 20,
+					right: 20,
+					bottom: 40,
+					left: 50
+				};
+				var xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([range.minX, range.maxX]);
+				var yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([range.minY, range.maxY]);
+				
+				var xAxis = d3.svg.axis()
+					.scale(xScale);
 
-		var yAxis = d3.svg.axis()
-			.scale(yScale)
-			.orient("left");
-			
-		vis.append("svg:g")
-			.attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
-			.call(xAxis);
-			
-		vis.append("svg:g")
-			.attr("transform", "translate(" + (MARGINS.left) + ",0)")
-			.call(yAxis);
+				var yAxis = d3.svg.axis()
+					.scale(yScale)
+					.orient("left");
+					
+				vis.append("svg:g")
+					.attr("class","axis")
+					.attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom/2) + ")")
+					.call(xAxis);
+					
+				vis.append("text")      // text label for the x axis
+					.attr("x", WIDTH / 2 )
+					.attr("y",  HEIGHT )
+					.style("text-anchor", "middle")
+					.text("X");
+					
+				vis.append("svg:g")
+					.attr("class","axis")
+					.attr("transform", "translate(" + (MARGINS.left) + ",0)")
+					.call(yAxis);
+				
+				vis.append("text")
+					.attr("transform", "rotate(-90)")
+					.attr("y", 0)
+					.attr("x", 0 - (HEIGHT / 2))
+					.attr("dy", "1em")
+					.style("text-anchor", "middle")
+					.text("Y");	
+				
+				var lineGen = d3.svg.line()
+					.x(function(d) {
+						return xScale(d.x);
+					})
+					.y(function(d) {
+						return yScale(d.y);
+					})
+					.interpolate("basis");
+				
+				vis.append('svg:path')
+				  .attr('d', lineGen(res))
+				  .attr('stroke', 'green')
+				  .attr('stroke-width', 2)
+				  .attr('fill', 'none');
+			},
+			error: function(e,text,errorThrown){
+				console.log("Error")
+				console.log(text);
+				console.log(e);
+				console.log(errorThrown);
+				//alert(errorThrown);
+			}
+		})
 		
-		var lineGen = d3.svg.line()
-			.x(function(d) {
-				return xScale(d.year);
-			})
-			.y(function(d) {
-				return yScale(d.sale);
+		function getRangeXY(data){
+			var maxX = maxY = Number.NEGATIVE_INFINITY;
+			var minX = minY = Number.POSITIVE_INFINITY;
+			data.forEach(function(e){
+				minX = (e.x < minX)? Math.floor(e.x):minX;
+				minY = (e.y < minY)? Math.floor(e.y):minY;
+				maxX = (e.x > maxX)? Math.ceil(e.x):maxX;
+				maxY = (e.y > maxY)? Math.ceil(e.y):maxY;
 			});
+			return {"minX":minX, "minY":minY, "maxX":maxX, "maxY":maxY}
+		}
 		
-		vis.append('svg:path')
-		  .attr('d', lineGen(data))
-		  .attr('stroke', 'green')
-		  .attr('stroke-width', 2)
-		  .attr('fill', 'none');
-		 
-		// esto no esta funcionando, sigue apareciendo super lineal el grafico
-		var lineGen = d3.svg.line()
-			.x(function(d) {
-				return xScale(d.year);
-			})
-			.y(function(d) {
-				return yScale(d.sale);
-			})
-			.interpolate("basis");
-
+		
 	</script>
 	
 </html>
