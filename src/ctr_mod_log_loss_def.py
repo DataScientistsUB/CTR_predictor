@@ -145,8 +145,24 @@ def data(path, D):
             del row['ts']
 
             # round float to integers (to avoid one new column for every decimal value)
-            row['net'] = str(int(round(float(row['net']))))
-            row['price'] = str(int(round(float(row['price']))))
+            # row['net'] = str(int(round(float(row['net']))))
+            # row['price'] = str(int(round(float(row['price']))))
+
+            if row['average'] == '':
+                row['average'] = 0.
+            adults_bins = range(0, 20, 1)+range(20, 200, 25)+[10000]
+            children_bins = range(0, 20, 1)+range(20, 200, 25)+[10000]
+            stay_bins = range(0, 30, 1)+range(30, 60, 2)+range(60, 100, 10)+[10000]
+            adv_bins = range(0, 30, 1)+range(30, 60, 2)+range(60, 100, 5)+range(100, 400, 10)+[365*10]
+            average_bins = np.arange(0,10.1,0.1)
+            price_bins = [0]+range(10, 200, 1)+range(200, 600, 5)+range(600, 1000, 10)+range(1000, 2000, 50)+[100000]
+            row['price'] = str(min(price_bins, key=lambda x:abs(x-float(row['price']))))
+            row['net'] = str(min(price_bins, key=lambda x:abs(x-float(row['net']))))
+            row['adv'] = str(min(adv_bins, key=lambda x:abs(x-float(row['adv']))))
+            row['average'] = str(min(average_bins, key=lambda x:abs(x-float(row['average']))))
+            row['adults'] = str(min(adults_bins, key=lambda x:abs(x-float(row['adults']))))
+            row['children'] = str(min(children_bins, key=lambda x:abs(x-float(row['children']))))
+            row['stay'] = str(min(stay_bins, key=lambda x:abs(x-float(row['stay']))))
 
             # build x
             x = []
@@ -388,7 +404,7 @@ CVR = 0.17        # Conversion Rate
 CPA = 5./1000.    # Cost Per Ad
 IPR = 5.          # Income Per buy
 
-baseline = sum(5.*np.array(y_test)*CVR)-CPA*len(y_test)
+baseline = sum(IPR*np.array(y_test)*CVR)-CPA*len(y_test)
 print 'Baseline revenue: {:.2f} euros'.format(baseline)
 
 revenue_new = []
