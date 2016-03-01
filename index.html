@@ -19,8 +19,8 @@
 		</noscript>
 		
 		<style>
-			.clickable{
-				cursor:pointer;
+			a{
+				color:blue;
 			}
 		</style>
 	</head>
@@ -34,7 +34,7 @@
 				<p>Advanced CTR prediction with weigthed cross-entropy loss</p>
 				<ul class="actions">
 					<li>
-						<a href="demos.html" class="button big">View live example</a>
+						<a href="demos.html" class="button big">View results</a>
 					</li>
 				</ul>
 			</section>
@@ -43,26 +43,32 @@
 			<section id="one" class="wrapper style1 special">
 				<div class="container">
 					<header class="major">
-						<h2>Technologies</h2>
+						<h2>Technologies & methodologies</h2>
 					</header>
 					<div class="row 150%">
 						<div class="4u 12u$(medium)">
 							<section class="box">
-								<i id="github_lnk" class="icon big color1 rounded fa-github-alt clickable"></i>
+								<a href="https://github.com/DataScientistsUB/CTR_predictor" target="_blank">
+									<i id="github_lnk" class="icon big color1 rounded fa-github-alt clickable"></i>
+								</a>
 								<h3>Github</h3>
 								<p>GitHub is a web-based Git repository hosting service. It offers all of the distributed revision control and source code management (SCM) functionality of Git as well as adding its own features.</p>
 							</section>
 						</div>
 						<div class="4u 12u$(medium)">
 							<section class="box">
-								<i class="icon big rounded color9 fa-desktop clickable"></i>
-								<h3>Consectetur adipisicing</h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laudantium ullam consequatur repellat debitis maxime.</p>
+								<a href="https://www.kaggle.com/c/avazu-ctr-prediction" target="_blank">
+									<i class="icon big rounded color9 fa-calculator clickable"></i>
+								</a>
+								<h3>Machine Learning</h3>
+								<p>Usage of FTRL-proximal algorithm: performance evaluation using weighted log-loss. Adapted from the <a href="https://www.kaggle.com/c/avazu-ctr-prediction" target="_blank">kaggle CTR prediction contest</a>. More info about the algorithm <a href="http://people.csail.mit.edu/romer/papers/TISTRespPredAds.pdf" target="_blank">here</a>.</p>
 							</section>
 						</div>
 						<div class="4u$ 12u$(medium)">
 							<section class="box">
-								<i id="d3_lnk" class="icon big rounded color6 fa-area-chart clickable"></i>
+								<a href="//d3js.org" target="_blank">
+									<i id="d3_lnk" class="icon big rounded color6 fa-area-chart clickable"></i>
+								</a>
 								<h3>D3.js</h3>
 								<p>D3.js is a JavaScript library for manipulating documents based on data.</p>
 							</section>
@@ -180,9 +186,4 @@
 			</footer>
 
 	</body>
-	<script>
-		document.querySelector("#github_lnk").addEventListener("click",function(){
-			window.open("//github.com")
-		})
-	</script>
 </html>
