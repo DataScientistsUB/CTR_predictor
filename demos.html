@@ -208,22 +208,6 @@
 	</body>
 	<script>
 		var res,range;
-		$(function(){
-			var data = [4, 8, 15, 16, 23, 42];
-			setTimeout(function(){
-				width = document.querySelector("#stars_chart").offsetWidth;
-				var x = d3.scale.linear()
-					.domain([0, d3.max(data)])
-					.range([0, width]);
-					
-				d3.select("#stars_chart")
-				  .selectAll("div")
-					.data(data)
-				  .enter().append("div")
-					.style("width", function(d) { return x(d) + "px"; })
-					.text(function(d) { return d; });
-			}, 1000);
-		});
 		
 		$.ajax({
 			//url: "data/thresholdVSrevenue.txt",
@@ -245,73 +229,91 @@
 						console.log(errorThrown);
 					},
 					success: function(data2){
-						console.log("SUCCESS");
-						data = data.split("\n").map(function(e){return {"x":e.split(" ")[0], "y":e.split(" ")[1]}});
-						range = getRangeXY(data);
-						data2 = data2.split("\n").map(function(e){return {"x":e.split(" ")[0], "y":e.split(" ")[1]}});
-						var vis = d3.select("#visualisation");
-						var WIDTH = 1000;
-						var HEIGHT = 500;
-						var MARGINS = {
-							top: 20,
-							right: 20,
-							bottom: 20,
-							left: 50
-						};
-						var xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([range.minX, range.maxX]);
-						var yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([range.minY, range.maxY]);
-						
-						var xAxis = d3.svg.axis()
-							.scale(xScale);
+						$.ajax({
+							url: "data/thresholdVSrevenue.txt",
+							error: function(){
+								console.log("Error");
+								console.log(text);
+								console.log(e);
+								console.log(errorThrown);
+							},
+							success: function(data3){
+								console.log("SUCCESS");
+								data = data.split("\n").map(function(e){return {"x":e.split(" ")[0], "y":e.split(" ")[1]}});
+								range = getRangeXY(data);
+								data2 = data2.split("\n").map(function(e){return {"x":e.split(" ")[0], "y":e.split(" ")[1]}});
+								data3 = data3.split("\n").map(function(e){return {"x":e.split(" ")[0], "y":e.split(" ")[1]}});
+								var vis = d3.select("#visualisation");
+								var WIDTH = 1000;
+								var HEIGHT = 500;
+								var MARGINS = {
+									top: 20,
+									right: 20,
+									bottom: 20,
+									left: 50
+								};
+								var xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([range.minX, range.maxX]);
+								var yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([range.minY, range.maxY]);
+								
+								var xAxis = d3.svg.axis()
+									.scale(xScale);
 
-						var yAxis = d3.svg.axis()
-							.scale(yScale)
-							.orient("left");
-							
-						vis.append("svg:g")
-							.attr("class","axis")
-							.attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
-							.call(xAxis);
-						/*	
-						vis.append("text")      // text label for the x axis
-							.attr("x", WIDTH / 2 )
-							.attr("y",  HEIGHT )
-							.style("text-anchor", "middle")
-							.text("X");
-						*/	
-						vis.append("svg:g")
-							.attr("class","axis")
-							.attr("transform", "translate(" + (MARGINS.left) + ",0)")
-							.call(yAxis);
-						
-						vis.append("text")
-							.attr("transform", "rotate(-90)")
-							.attr("y", 0)
-							.attr("x", 0 - (HEIGHT / 2))
-							.attr("dy", "1em")
-							.style("text-anchor", "middle")
-							.text("Income (€)");	
-						
-						var lineGen = d3.svg.line()
-							.x(function(d) {
-								return xScale(d.x);
-							})
-							.y(function(d) {
-								return yScale(d.y);
-							})
-							.interpolate("basis");
-						
-						vis.append('svg:path')
-						  .attr('d', lineGen(data))
-						  .attr('stroke', 'green')
-						  .attr('stroke-width', 2)
-						  .attr('fill', 'none');
-						  
-						vis.append('svg:path')
-						  .attr('d', lineGen(data2))
-						  .attr('stroke', 'blue')
-						  .attr('stroke-width', 2)
-						  .attr('fill', 'none');
+								var yAxis = d3.svg.axis()
+									.scale(yScale)
+									.orient("left");
+									
+								vis.append("svg:g")
+									.attr("class","axis")
+									.attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+									.call(xAxis);
+								/*	
+								vis.append("text")      // text label for the x axis
+									.attr("x", WIDTH / 2 )
+									.attr("y",  HEIGHT )
+									.style("text-anchor", "middle")
+									.text("X");
+								*/	
+								vis.append("svg:g")
+									.attr("class","axis")
+									.attr("transform", "translate(" + (MARGINS.left) + ",0)")
+									.call(yAxis);
+								
+								vis.append("text")
+									.attr("transform", "rotate(-90)")
+									.attr("y", 0)
+									.attr("x", 0 - (HEIGHT / 2))
+									.attr("dy", "1em")
+									.style("text-anchor", "middle")
+									.text("Income (€)");	
+								
+								var lineGen = d3.svg.line()
+									.x(function(d) {
+										return xScale(d.x);
+									})
+									.y(function(d) {
+										return yScale(d.y);
+									})
+									.interpolate("basis");
+								
+								vis.append('svg:path')
+								  .attr('d', lineGen(data))
+								  .attr('stroke', 'green')
+								  .attr('stroke-width', 2)
+								  .attr('fill', 'none');
+								  
+								vis.append('svg:path')
+								  .attr('d', lineGen(data2))
+								  .attr('stroke', 'blue')
+								  .attr('stroke-width', 2)
+								  .attr('fill', 'none');
+								
+								vis.append('svg:path')
+								  .attr('d', lineGen(data3))
+								  .attr('stroke', 'red')
+								  .attr('stroke-width', 2)
+								  .attr('fill', 'none');
+							}
+						})
 					}
 				})
 			}
